@@ -12,9 +12,21 @@ from sklearn.ensemble import (
 
 from sklearn.linear_model import LinearRegression
 
-df = pd.read_csv(
-    "../data/housing.csv"
+import os
+
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
 )
+
+DATA_PATH = os.path.join(
+    BASE_DIR,
+    "data",
+    "housing.csv"
+)
+
+df = pd.read_csv(DATA_PATH)
 
 X = df.drop(
     "Price",
@@ -70,15 +82,30 @@ model.fit(
     X_train,
     y_train
 )
+MODEL_DIR = os.path.join(
+    BASE_DIR,
+    "models"
+)
+
+os.makedirs(
+    MODEL_DIR,
+    exist_ok=True
+)
 
 joblib.dump(
     model,
-    "../models/stacking_regressor.pkl"
+    os.path.join(
+        MODEL_DIR,
+        "stacking_regressor.pkl"
+    )
 )
 
 joblib.dump(
     scaler,
-    "../models/scaler.pkl"
+    os.path.join(
+        MODEL_DIR,
+        "scaler.pkl"
+    )
 )
 
 print("Model Saved Successfully")
